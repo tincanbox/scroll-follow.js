@@ -1,0 +1,116 @@
+<html>
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="../src/scrollfollow.js"></script>
+    <style type="text/css">
+      body{
+        padding:0;
+        margin :0;
+      }
+      #arrow{
+        opacity: .6;
+        height: 46px;
+      }
+      #footer{
+        height: 240px;
+        background-color: #dadada;
+      }
+      #header h1{
+        font-size: 3.6em;
+        color: #5fbae4;
+        text-align:center;
+        margin-top: 2em;
+        font-family: Lobster;
+      }
+    </style>
+  </head>
+  <body style="min-height:1400px;">
+    <div id="header">
+      <h1>Scroll Follow</h1>
+    </div>
+    <div id="content">
+      <div style="padding:0 66px 240px;font-size:36px;color: #3f3f3f; font-family: cursive;">
+        <p>Lorem ipsum dolor sit amet, duo sententiae liberavisse eu, ea ipsum vidisse contentiones pri, diam wisi praesent eos an. Utamur dolorum consectetuer te pro. In justo pertinax nam, velit placerat mediocritatem eos ad, cu molestiae hendrerit usu. Pri ad nisl possit, eam eu quando prompta adipiscing. Vim omnium explicari philosophia et, te vix habemus lucilius suscipiantur.
+
+Te nec suas labitur explicari, in mel meis quodsi. Meis appareat voluptatum at mei. Viderer petentium ne sit, his at iuvaret reprimique, vix at civibus suscipit consectetuer. Per tota verear definitiones cu, te nisl ponderum cum. Sumo sadipscing no his. Te paulo dolorum comprehensam sea, hinc alterum id pro.
+
+Rationibus adipiscing assueverit ei has, his veri audiam discere te. Qui eu denique mnesarchum, te ius nullam audire. His cu mundi indoctum repudiare, quis torquatos ne nam. Nihil luptatum sapientem est id. Ius in debet ocurreret iracundia, an per quas ullum saperet. Te his lorem convenire tractatos.
+
+Eros aeterno legendos pro ut, mel putent disputando id. Vim minim dictas ut. Nec honestatis eloquentiam ad. Cu corpora incorrupte sea, ne his oblique delenit eligendi. Usu wisi officiis contentiones ad.
+
+Ut illud aperiam definitionem eos, ei viris voluptatibus vix. An saepe sanctus electram est. Velit cetero commodo ut sea. Luptatum quaerendum sed ei, cu periculis persecuti usu. </p><p>Lorem ipsum dolor sit amet, duo sententiae liberavisse eu, ea ipsum vidisse contentiones pri, diam wisi praesent eos an. Utamur dolorum consectetuer te pro. In justo pertinax nam, velit placerat mediocritatem eos ad, cu molestiae hendrerit usu. Pri ad nisl possit, eam eu quando prompta adipiscing. Vim omnium explicari philosophia et, te vix habemus lucilius suscipiantur.
+
+Te nec suas labitur explicari, in mel meis quodsi. Meis appareat voluptatum at mei. Viderer petentium ne sit, his at iuvaret reprimique, vix at civibus suscipit consectetuer. Per tota verear definitiones cu, te nisl ponderum cum. Sumo sadipscing no his. Te paulo dolorum comprehensam sea, hinc alterum id pro.
+
+Rationibus adipiscing assueverit ei has, his veri audiam discere te. Qui eu denique mnesarchum, te ius nullam audire. His cu mundi indoctum repudiare, quis torquatos ne nam. Nihil luptatum sapientem est id. Ius in debet ocurreret iracundia, an per quas ullum saperet. Te his lorem convenire tractatos.
+
+Eros aeterno legendos pro ut, mel putent disputando id. Vim minim dictas ut. Nec honestatis eloquentiam ad. Cu corpora incorrupte sea, ne his oblique delenit eligendi. Usu wisi officiis contentiones ad.
+
+Ut illud aperiam definitionem eos, ei viris voluptatibus vix. An saepe sanctus electram est. Velit cetero commodo ut sea. Luptatum quaerendum sed ei, cu periculis persecuti usu.</p></div>
+    </div>
+    <div id="footer"></div>
+    <div id="top-right" class="go-to-top"><img id="arrow" src="./img/arrow.png"></div>
+    <div id="top-left" class="go-to-top"><img id="arrow" src="./img/arrow.png"></div>
+    <script type="text/javascript">
+      $(function(){
+
+        // ver. 1: Frame sync animation.
+        $("#top-left")
+          .css({
+            opacity : 0,
+            left: "10px"
+          })
+          .scrollfollow({
+            bottom        : 20,
+            start_margin : 420,
+            stop_margin  : 240,
+            anim_length  : 360,
+            toggle_anim  : function(frame, $el){
+              $el.css({ opacity : (frame/360) });
+            }
+          });
+
+        // ver. 2: Frame trigger animation.
+        $("#top-right")
+          .css({
+            opacity : 0,
+            right: "10px"
+          })
+          .scrollfollow({
+            bottom       : 40,
+            start_margin : 420,
+            stop_margin  : 240,
+            anim_length  : false, // If you want use scroll Y as frame, set this as false.
+            toggle_anim  : (function(){
+              var animating = false;
+              var prev_frame = 0;
+              var shawn = false;
+              return function(frame, $el){
+                // Flags
+                if(animating) return;
+                if(frame == prev_frame) return;
+
+                if(frame <= 240){
+                  if(!shawn) return;
+                  animating = true;
+                  $el.stop().fadeTo('fast', 0, function(){ animating=false;shawn=false; });
+                }else{
+                  if(shawn) return;
+                  animating = true;
+                  $el.stop().fadeTo('fast', 1, function(){ animating=false;shawn=true; });
+                }
+              }
+          })()
+        });
+
+        $(document).on('click', '#top-left, #top-right', function(){
+          $('html, body').animate({
+            scrollTop: 0
+          });
+        });
+
+      });
+    </script>
+  </body>
+</html>
